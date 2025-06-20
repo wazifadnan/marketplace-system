@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Menu - Campus Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #fce3ec, #ffe7d1, #d1f0ff, #e4ffe2);
+      background-size: 600% 600%;
+      animation: gradientBG 15s ease infinite;
+      font-family: "Poppins", sans-serif;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .intro-section, .contact-section {
+      background: white;
+      border-radius: 1rem;
+      padding: 25px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .quick-menu {
+      background: white;
+      padding: 25px;
+      border-radius: 1rem;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 30px;
+    }
+
+    .btn-menu {
+      border-radius: 2rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-menu:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .menu-logo {
+      max-width: 80px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <script>
+    if (!localStorage.getItem("loggedIn")) {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="menu.html">Campus Marketplace</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="menu.html">🏠 Menu</a></li>
+          <li class="nav-item"><a class="nav-link" href="marketplace.html">🛒 Marketplace</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">📊 Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">👤 Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html">🛍️ Cart <span class="badge bg-warning text-dark" id="cart-count">0</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="team.html">👨‍💻 Team</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🌟 Page Content -->
+  <main class="container my-4 flex-grow-1">
+    <div class="row">
+      <!-- LEFT CONTENT -->
+      <div class="col-lg-8">
+        <!-- 📝 Welcome Section -->
+        <section class="intro-section">
+          <h3>Welcome to Campus Marketplace 🛍️</h3>
+          <p>Campus Marketplace is a student-friendly platform created for the UiTM community. Whether you’re looking to buy used textbooks, electronics, or grab a ticket to campus events, we’ve got everything in one place. Fast, easy, and made just for you!</p>
+          <p>Start exploring the marketplace, track your purchases, manage your profile, and stay connected with your campus needs.</p>
+          <p>Everything is in good condition & perfect for students who want to save money.All items are student-budget friendly! 💸</p>
+        </section>
+
+        <!-- 🔥 What's New Section -->
+        <section class="intro-section">
+          <h4 class="mb-3">🔥 What's New</h4>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">📚 New Books Added</h5>
+                  <p class="card-text">Fresh listings for programming, Dont miss out!.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">💸 Discount Week</h5>
+                  <p class="card-text">Get up to 20% off selected used electronics this week only!</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">🎤 Concert Tickets</h5>
+                  <p class="card-text">Limited tickets available for UiTM Music Night. Buy now before they're gone!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 📞 Person In Charge -->
+        <section class="contact-section">
+          <h4 class="mb-3">📞 Person In Charge</h4>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">👨‍💼 Muhammad Wazif</h5>
+                  <p class="card-text mb-1">Marketplace Coordinator</p>
+                  <p class="card-text mb-0">📱 <a href="tel:+60123456789">+60 12-345 6789</a></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">👩‍💼 Siti Rafaela</h5>
+                  <p class="card-text mb-1">Student Affairs Liaison</p>
+                  <p class="card-text mb-0">📱 <a href="tel:+60198765432">+60 19-876 5432</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT QUICK MENU -->
+<!-- RIGHT QUICK MENU -->
+<div class="col-lg-4">
+  <div class="quick-menu text-center">
+    <img src="../images/uitm-logo.jpg" class="menu-logo" alt="UiTM Logo" />
+    <h4 class="mb-4">Quick Access</h4>
+    <a href="marketplace.html" class="btn btn-primary w-100 mb-2 btn-menu">🛒 Browse Products</a>
+    <a href="dashboard.html" class="btn btn-success w-100 mb-2 btn-menu">📊 My Dashboard</a>
+    <a href="profile.html" class="btn btn-info w-100 mb-2 btn-menu">👤 My Profile</a>
+    <a href="cart.html" class="btn btn-warning w-100 mb-2 btn-menu">🛍️ View Cart</a>
+    <a href="team.html" class="btn btn-secondary w-100 mb-3 btn-menu">👨‍💻 Our Team</a>
+    <button onclick="logout()" class="btn btn-danger w-100 btn-menu">🚪 Logout</button>
+  </div>
+</div>
+
+    </div>
+  </main>
+
+  <!-- ✅ Footer -->
+  <footer class="text-center py-3 bg-dark text-white mt-auto">
+    <p>&copy; 2025 Campus Marketplace. All Rights Reserved.</p>
+  </footer>
+
+  <!-- 🔧 Scripts -->
+  <script>
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("cart");
+      window.location.href = "login.html";
+    }
+
+    function updateCartCount() {
+      const count = JSON.parse(localStorage.getItem("cart"))?.length || 0;
+      document.getElementById("cart-count").textContent = count;
+    }
+
+    updateCartCount();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

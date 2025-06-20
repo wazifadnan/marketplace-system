@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Campus Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #fce3ec, #ffe7d1, #d1f0ff, #e4ffe2);
+      background-size: 600% 600%;
+      z-index: -1;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .product-item {
+      margin-bottom: 20px;
+    }
+
+    .product-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .product-item img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .toast {
+      z-index: 1050;
+    }
+
+    .modal-img {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <div id="particles-js"></div>
+
+  <!-- 🔐 Login check -->
+  <script>
+    if (!localStorage.getItem("loggedIn")) {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="menu.html">Campus Marketplace</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="menu.html">🏠 Menu</a></li>
+          <li class="nav-item"><a class="nav-link active" href="marketplace.html">🛒 Marketplace</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">📊 Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">👤 Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html">🛍️ Cart <span class="badge bg-warning text-dark" id="cart-count">0</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="team.html">👨‍💻 Team</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🛍️ Marketplace Content -->
+  <main class="container mt-4 flex-grow-1">
+    <div class="row mb-3">
+      <div class="col-12">
+        <h2>Available Products</h2>
+        <input type="text" id="search-bar" class="form-control" placeholder="Search for products" onkeyup="searchProducts()" />
+      </div>
+    </div>
+    <div class="row" id="product-list"></div>
+  </main>
+
+  <!-- ✅ Modal for Product Preview -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Product Name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img src="" id="modalProductImage" class="modal-img mb-3" alt="Product Image" />
+          <p id="modalProductPrice" class="fs-5 fw-bold"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Footer -->
+  <footer class="text-center py-3 bg-dark text-white mt-auto">
+    <p>&copy; 2025 Campus Marketplace. All Rights Reserved.</p>
+  </footer>
+
+  <!-- ✅ Toast Container -->
+  <div class="position-fixed bottom-0 end-0 p-3">
+    <div id="reserveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toast-body-text">Toast message here</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔧 JavaScript -->
+  <script>
+    const products = [
+      { id: 1, name: 'JavaScript Textbook', price: '20.00', image: '../images/products/java.jpg' },
+      { id: 2, name: 'Used Laptop - Dell', price: '350.00', image: '../images/products/dell.jpg' },
+      { id: 3, name: 'Electric Kettle', price: '15.00', image: '../images/products/kettle.jpg' },
+      { id: 4, name: 'Data Structures Book', price: '25.00', image: '../images/products/data.jpg' },
+      { id: 5, name: 'Campus Concert Ticket', price: '10.00', image: '../images/products/tix.jpg' },
+      { id: 6, name: 'Used Jerseys', price: '35.00', image: '../images/products/jersey.jpg' },
+      { id: 7, name: 'Blazer', price: '15.00', image: '../images/products/blazer.jpg' },
+      { id: 8, name: 'Toaster', price: '40.00', image: '../images/products/toaster.jpg' },
+      { id: 9, name: 'Printer', price: '60.00', image: '../images/products/printer.jpg' },
+    ];
+
+    function renderProducts(list) {
+      const productList = document.getElementById("product-list");
+      productList.innerHTML = "";
+
+      list.forEach(product => {
+        const col = document.createElement("div");
+        col.className = "col-md-4 col-sm-6 product-item";
+
+        col.innerHTML = `
+          <div class="card h-100">
+            <img src="${product.image}" alt="${product.name}" class="card-img-top" onclick="showProductModal('${product.name}', '${product.price}', '${product.image}')">
+            <div class="card-body text-center">
+              <h5 class="card-title">${product.name}</h5>
+              <p class="card-text">Price: RM ${product.price}</p>
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+                <button class="btn btn-warning" onclick="reserveItem(${product.id})">Reserve</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        productList.appendChild(col);
+      });
+    }
+
+    function showProductModal(name, price, image) {
+      document.getElementById('productModalLabel').textContent = name;
+      document.getElementById('modalProductImage').src = image;
+      document.getElementById('modalProductPrice').textContent = `Price: RM ${price}`;
+      const modal = new bootstrap.Modal(document.getElementById('productModal'));
+      modal.show();
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      showToast(`🛒 "${product.name}" added to cart.`);
+    }
+
+    function reserveItem(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      let reserved = JSON.parse(localStorage.getItem("reservedItems")) || [];
+      const already = reserved.find(p => p.id === productId);
+
+      if (already) {
+        showToast(`⚠️ "${product.name}" is already reserved.`);
+      } else {
+        reserved.push(product);
+        localStorage.setItem("reservedItems", JSON.stringify(reserved));
+        showToast(`✅ "${product.name}" has been reserved.`);
+      }
+    }
+
+    function searchProducts() {
+      const searchTerm = document.getElementById("search-bar").value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(searchTerm));
+      renderProducts(filtered);
+    }
+
+    function updateCartCount() {
+      const count = JSON.parse(localStorage.getItem("cart"))?.length || 0;
+      document.getElementById("cart-count").textContent = count;
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("cart");
+      window.location.href = "login.html";
+    }
+
+    function showToast(message) {
+      const toastEl = document.getElementById("reserveToast");
+      const toastBody = document.getElementById("toast-body-text");
+      toastBody.textContent = message;
+
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+    }
+
+    renderProducts(products);
+    updateCartCount();
+  </script>
+
+  <script src="js/particles.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
